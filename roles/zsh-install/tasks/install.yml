@@ -13,6 +13,8 @@
       - tmux
       - git
       - wget
+      - thefuck
+      - fzf
     state: present
   # brew don't work from root user on macOS
   become: "{{ ansible_distribution != 'MacOSX' }}"
