@@ -19,16 +19,16 @@ Darwin*)
     else
         brew update
     fi
-    for i in "${!brew_install[@]}"; do
+    brew_install=(ansible gnu-tar)
+    for i in "${brew_install[@]}"; do
         printf "\nInstalling %s" "$i"
         if brew list "$i" &>/dev/null; then
-            echo -e "\n${1} is already installed, updating package"
+            echo -e "\n${i} is already installed, updating package"
             brew upgrade "$i"
         else
             brew install "$i" && echo "$i is installed"
         fi
     done
-    brew_install=(ansible gnu-tar)
     ;;
 
 Linux*Microsoft*)
