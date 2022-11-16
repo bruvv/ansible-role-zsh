@@ -19,10 +19,10 @@ title "Download ansible-to-zsh to /tmp/zsh.yml"
 git clone https://github.com/bruvv/ansible-role-zsh.git /tmp/zsh
 
 title "Provision playbook for root"
-ansible-playbook -i "localhost," -c local -b /tmp/zsh/zsh.yml
+ansible-playbook -i "localhost," -c local -b /tmp/zsh/playbook.yml
 
 title "Provision playbook for $(whoami)"
-ansible-playbook -i "localhost," -c local -b /tmp/zsh/zsh.yml --extra-vars="zsh_user=$(whoami)"
+ansible-playbook -i "localhost," -c local -b /tmp/zsh/playbook.yml --extra-vars="zsh_user=$(whoami)"
 
 title "Finished! Please, restart your shell."
 echo ""
