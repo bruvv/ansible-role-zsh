@@ -19,7 +19,7 @@ Darwin*)
     else
         brew update
     fi
-    brew_install=(ansible gnu-tar git)
+    brew_install=(ansible gnu-tar git zsh tmux)
     for i in "${brew_install[@]}"; do
         printf "\nInstalling %s" "$i"
         if brew list "$i" &>/dev/null; then
@@ -33,7 +33,7 @@ Darwin*)
     git clone https://github.com/bruvv/ansible-role-zsh.git /tmp/zsh
 
     title "Provision playbook for root"
-    ansible-playbook -i "localhost," -c local -b /tmp/zsh/playbook.yml
+    ansible-playbook -i "localhost," -c local -b /tmp/zsh/playbook.yml --extra-vars="zsh_user=$(whoami)" --ask-become-pass
     ;;
 
 Linux*Microsoft*)
