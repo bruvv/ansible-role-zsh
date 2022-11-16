@@ -8,12 +8,40 @@ title() {
 }
 
 title "Install pip and Ansible"
-sudo apt update
-sudo apt install python3-pip -y
-sudo pip3 install ansible
 
-# title "Install viasite-ansible.zsh"
-# ansible-galaxy install viasite-ansible.zsh --force
+case "$(uname -sr)" in
+
+Darwin*)
+    echo 'Running Mac OS stuff'
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    brew install ansible
+    ;;
+
+Linux*Microsoft*)
+    echo 'Running WSL stuff' # Windows Subsystem for Linux
+    ;;
+
+Linux*)
+    echo 'Running Linux stuff'
+    sudo apt update
+    sudo apt -y remove needrestart
+    sudo apt install software-properties-common git -yqq
+    sudo apt-add-repository --yes --update ppa:ansible/ansible
+    sudo apt install ansible -yqq
+    ;;
+
+CYGWIN* | MINGW* | MINGW32* | MSYS*)
+    echo 'Running MS Windows stuff'
+    ;;
+
+# Add here more strings to compare
+# See correspondence table at the bottom of this answer
+
+*)
+    echo 'Failed to detect OS, exiting. Run only on Linux and Mac'
+
+    ;;
+esac
 
 title "Download ansible-to-zsh to /tmp/zsh"
 git clone https://github.com/bruvv/ansible-role-zsh.git /tmp/zsh
