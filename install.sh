@@ -19,7 +19,7 @@ Darwin*)
     else
         brew update
     fi
-    brew_install=(ansible gnu-tar git zsh tmux)
+    brew_install=(ansible)
     for i in "${brew_install[@]}"; do
         printf "\nInstalling %s" "$i"
         if brew list "$i" &>/dev/null; then

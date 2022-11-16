@@ -9,6 +9,8 @@
   package:
     name:
       - zsh
+      - gnu-tar
+      - tmux
       - git
       - wget
     state: present

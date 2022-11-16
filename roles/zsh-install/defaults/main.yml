@@ -24,6 +24,7 @@ zsh_load_etc_profile: yes
 
 fzf_widgets: ytet5uy4/fzf-widgets
 
+zsh_antigen_version: master
 zsh_fzf_version: 0.35.0
 
 zsh_antigen_bundles:
