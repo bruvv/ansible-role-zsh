@@ -5,7 +5,7 @@
   become: true
   when: ansible_os_family != 'Darwin'
 
-- name: Install zsh, git, wget
+- name: Installing system packages
   package:
     name:
       - zsh
