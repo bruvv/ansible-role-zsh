@@ -2,9 +2,9 @@
 zsh_user: "{{ ansible_user_id }}"
 
 # .zshrc config
-zsh_hist_stamps: yyyy-mm-dd
+zsh_hist_stamps: dd-mm-yyyy
 zsh_share_history: no
-zsh_update_interval: 30 # set 0 for disable autoupdates
+zsh_update_interval: 7 # set 0 for disable autoupdates
 zsh_editor: # mcedit
 zsh_term: xterm-256color
 zsh_mc_solarized_skin: no
@@ -24,17 +24,16 @@ zsh_load_etc_profile: yes
 
 fzf_widgets: ytet5uy4/fzf-widgets
 
-zsh_antigen_version: master
 zsh_fzf_version: 0.35.0
 
 zsh_antigen_bundles:
-  - { name: command-not-found, when: "{{ ansible_os_family != 'Darwin' }}" } # too slow on OSX
-  - { name: brew, command: brew, when: "{{ ansible_os_family = 'Darwin' }}" } # too slow on OSX}
+  - { name: command-not-found, when: "{{ ansible_os_family != 'Darwin' }}" }
+  - { name: brew, command: brew, when: "{{ ansible_os_family = 'Darwin' }}" }
   - { name: docker, command: docker }
   - { name: docker-compose, command: docker-compose }
-  - fancy-ctrl-z
-  - git-extras
-  - gnu-utils
+  - { name: fancy-ctrl-z, command: fancy-ctrl-z }
+  - { name: git-extras, command: git-extras }
+  - { name: gnu-utils, command: gnu-utils }
   - { name: httpie, command: http }
   # - { name: golang, command: go }
   - { name: gulp, command: gulp }
@@ -43,16 +42,13 @@ zsh_antigen_bundles:
       name: kubectl,
       command: kubectl,
       when: "{{ ansible_os_family != 'Darwin' }}",
-    } # too slow on OSX
+    }
+  - { name: python, command: python }
   - { name: pip, command: pip }
   - { name: rake, command: rake }
   - { name: symfony2, command: symfony }
   - { name: systemd, command: systemctl }
-  - python
-  - { name: tmux, command: tmux, when: "{{ ansible_os_family != 'Darwin' }}" } # too slow on OSX
   - { name: vagrant, command: vagrant }
-  - { name: viasite/server-scripts, command: dbdump }
-
   # on zsh 4.3.10 autosuggestions breaks multiline commands with \
   - {
       name: zsh-users/zsh-autosuggestions,

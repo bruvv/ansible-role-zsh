@@ -13,8 +13,8 @@
       - wget
     state: present
   # brew don't work from root user on macOS
-  become: true
-  when: zsh_user == 'root' and ansible_os_family == 'Darwin'
+  become: "{{ ansible_distribution != 'MacOSX' }}"
+  when: not (zsh_user == 'root')
 
 - name: check if {{zsh_antigen_path}} exist
   stat:
@@ -30,24 +30,15 @@
   when: not zsh_antigen_path_present.stat.exists
 
 - name: Clone antigen {{ zsh_antigen_version }}
-  git:
-    repo: https://github.com/zsh-users/antigen.git
+  get_url:
+    url: git.io/antigen
     dest: "{{ zsh_antigen_path }}/antigen"
-    version: "{{ zsh_antigen_version }}"
-    force: true
-  become: true
+    mode: 0755
+    owner: "{{ zsh_user }}"
+    group: "{{ zsh_user_group }}"
+  # become: true
   # become_user: "{{ zsh_user }}"
   register: zsh_register_antigen_clone
-
-- name: Clone iwfmp/mc-solarized-skin
-  git:
-    repo: https://github.com/iwfmp/mc-solarized-skin.git
-    version: master
-    dest: "~{{ zsh_user }}/.mc/lib/mc-solarized"
-    force: true
-  become: true
-  become_user: "{{ zsh_user }}"
-  when: zsh_mc_solarized_skin and not zsh_shared
 
 - name: Check fzf installed
   command: which fzf
