@@ -225,4 +225,4 @@ zsh_command_time_min_seconds: 3
 zsh_command_time_echo: ""
 
 # powerlevel10k
-zsh_powerlevel10k_instant_prompt: no
+zsh_powerlevel10k_instant_prompt: yes
