@@ -20,6 +20,7 @@
   stat:
     path: "{{zsh_antigen_path}}"
   register: zsh_antigen_path_present
+
 - name: create direcoty {{zsh_antigen_path}}
   become: true
   file:
