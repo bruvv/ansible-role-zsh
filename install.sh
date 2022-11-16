@@ -4,7 +4,7 @@ set -eu
 title() {
     local color='\033[1;37m'
     local nc='\033[0m'
-    printf "\n${color}$1${nc}\n"
+    printf "\n%s" "${color}$1${nc}"
 }
 
 title "Install pip and Ansible"
@@ -19,7 +19,7 @@ Darwin*)
     else
         brew update
     fi
-    brew_install=(ansible gnu-tar)
+    brew_install=(ansible gnu-tar git)
     for i in "${brew_install[@]}"; do
         printf "\nInstalling %s" "$i"
         if brew list "$i" &>/dev/null; then
@@ -29,6 +29,11 @@ Darwin*)
             brew install "$i" && echo "$i is installed"
         fi
     done
+    title "Download ansible-to-zsh to /tmp/zsh"
+    git clone https://github.com/bruvv/ansible-role-zsh.git /tmp/zsh
+
+    title "Provision playbook for root"
+    ansible-playbook -i "localhost," -c local -b /tmp/zsh/playbook.yml
     ;;
 
 Linux*Microsoft*)
@@ -42,6 +47,15 @@ Linux*)
     sudo apt install software-properties-common git -yqq
     sudo apt-add-repository --yes --update ppa:ansible/ansible
     sudo apt install ansible -yqq
+    title "Download ansible-to-zsh to /tmp/zsh"
+    git clone https://github.com/bruvv/ansible-role-zsh.git /tmp/zsh
+
+    title "Provision playbook for root"
+    ansible-playbook -i "localhost," -c local -b /tmp/zsh/playbook.yml
+
+    title "Provision playbook for $(whoami)"
+    ansible-playbook -i "localhost," -c local -b /tmp/zsh/playbook.yml --extra-vars="zsh_user=$(whoami)"
+
     ;;
 
 CYGWIN* | MINGW* | MINGW32* | MSYS*)
@@ -56,15 +70,6 @@ CYGWIN* | MINGW* | MINGW32* | MSYS*)
 
     ;;
 esac
-
-title "Download ansible-to-zsh to /tmp/zsh"
-git clone https://github.com/bruvv/ansible-role-zsh.git /tmp/zsh
-
-title "Provision playbook for root"
-ansible-playbook -i "localhost," -c local -b /tmp/zsh/playbook.yml
-
-title "Provision playbook for $(whoami)"
-ansible-playbook -i "localhost," -c local -b /tmp/zsh/playbook.yml --extra-vars="zsh_user=$(whoami)"
 
 title "Finished! Please, restart your shell."
 echo ""
