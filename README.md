@@ -1,8 +1,4 @@
-[![Build Status](https://travis-ci.org/viasite-ansible/ansible-role-zsh.svg?branch=master)](https://travis-ci.org/viasite-ansible/ansible-role-zsh)
-
-Tested on Debian 10, Ubuntu 16.04, Ubuntu 18.04, Ubuntu 20.04, macOS 10.12, CentOS 8.
-
-**For upgrade from viasite-ansible.zsh 1.x, 2.x to 3.0 see [below](#upgrade).**
+Tested on Ubuntu 22.04, macOS 13.0.1.
 
 ## Zero-knowledge install:
 
@@ -12,16 +8,14 @@ If you using Ubuntu or Debian and not familiar with Ansible, you can just execut
 curl https://raw.githubusercontent.com/bruvv/ansible-role-zsh/master/install.sh | bash
 ```
 
-It will install pip3, ansible and setup zsh for root and current user.
-
 Then [configure terminal application](#configure-terminal-application).
 
 ## Includes:
 
 - zsh
 - [antigen](https://github.com/zsh-users/antigen)
+- [powerlevel10k](https://github.com/romkatv/powerlevel10k)
 - [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh)
-- [powerlevel9k theme](https://github.com/bhilburn/powerlevel9k)
 - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
 - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
 - [unixorn/autoupdate-antigen.zshplugin](https://github.com/unixorn/autoupdate-antigen.zshplugin)
@@ -30,8 +24,7 @@ Then [configure terminal application](#configure-terminal-application).
 
 ## Features
 
-- customize powerlevel9k theme prompt segments and colors
-- default colors tested with solarized dark and default grey terminal in putty
+- customize powerlevel10k theme prompt segments and colors
 - add custom prompt elements from yml
 - custom zsh config with `~/.zshrc.local` or `/etc/zshrc.local`
 - load `/etc/profile.d` scripts
@@ -45,10 +38,6 @@ Then [configure terminal application](#configure-terminal-application).
 
 ![colors demo](https://github.com/popstas/popstas.github.io/blob/master/images/2017-03/ansible-role-zsh-colors.gif?raw=true)
 
-## Midnight Commander Solarized Dark skin
-
-If you using Solarized Dark scheme and `mc`, you should want to install skin, then set `zsh_mc_solarized_skin: yes`
-
 ## Demo install in Vagrant
 
 You can test work of role before install in real machine.
@@ -60,71 +49,6 @@ Note: you cannot install vagrant on VPS like Digital Ocean or in Docker. Use loc
 ## Install for real machine
 
 Zero-knowledge install: see [above](#zero-knowledge-install).
-
-### Manual install
-
-0. [Install Ansible](http://docs.ansible.com/ansible/intro_installation.html).
-   For Ubuntu:
-
-```bash
-sudo apt update
-sudo apt install python3-pip -y
-sudo pip3 install ansible
-```
-
-1. Download role:
-
-```
-ansible-galaxy install viasite-ansible.zsh --force
-```
-
-2. Write playbook or use [playbook.yml](playbook.yml):
-
-```
-- hosts: all
-  vars:
-    zsh_antigen_bundles_extras:
-      - nvm
-      - joel-porquet/zsh-dircolors-solarized
-    zsh_autosuggestions_bind_key: "^U"
-  roles:
-    - viasite-ansible.zsh
-```
-
-3. Provision playbook:
-
-```
-ansible-playbook -i "localhost," -c local -K playbook.yml
-```
-
-If you want to provision role for root user on macOS, you should install packages manually:
-
-```
-brew install zsh git wget
-```
-
-It will install zsh environment for ansible remote user. If you want to setup zsh for other users,
-you should define variable `zsh_user`:
-
-Via playbook:
-
-```
-- hosts: all
-  roles:
-    - { role: viasite-ansible.zsh, zsh_user: otheruser }
-    - { role: viasite-ansible.zsh, zsh_user: thirduser }
-```
-
-Or via command:
-
-```
-ansible-playbook -i hosts zsh.yml -e zsh_user=otheruser
-```
-
-4. Install fzf **without shell extensions**, [download binary](https://github.com/junegunn/fzf-bin/releases)
-   or `brew install fzf` for macOS.
-
-Note: I don't use `tmux-fzf` and don't tested work of it.
 
 ## Multiuser shared install
 
@@ -282,42 +206,3 @@ You can add any code in variable `zsh_custom_before`, `zsh_custom_after`.
 
 - zsh_custom_before - before include antigen.zsh
 - zsh_custom_after - before include ~/.zshrc.local
-
-## Upgrade
-
-viasite-ansible.zsh v3.0 introduces antigen v2.0, it don't have backward compatibility to antigen 1.x.
-
-I don't spent much time for smooth upgrade, therefore you probably should do some manual actions:
-if powerlevel9k prompt don't loaded after provision role, you should execute `antigen reset`.
-
-After reopen shell all should be done.
-
-### Downgrade to antigen v1
-
-Antigen v2 much faster (up to 2x more faster startup), but if something went wrong, you can downgrade to antigen v1,
-see note for zsh 4.3 users below.
-
-### For users with zsh 4.x
-
-Antigen v2 not work on zsh < 5.0, if you use zsh 4.x, please add to you playbook:
-
-```yaml
-zsh_antigen_version: v1.4.1
-```
-
-## Known bugs
-
-### `su username` caused errors
-
-See [antigen issue](https://github.com/zsh-users/antigen/issues/136).
-If both root and su user using antigen, you should use `su - username` in place of `su username`.
-
-Or you can use bundled alias `suser`.
-
-Also, you can try to fix it, add to `~/.zshrc.local`:
-
-```
-alias su='su -'
-```
-
-But this alias can break you scripts, that using `su`.
