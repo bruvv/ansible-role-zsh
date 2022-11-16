@@ -30,13 +30,12 @@
   when: not zsh_antigen_path_present.stat.exists
 
 - name: Clone antigen {{ zsh_antigen_version }}
-  get_url:
-    url: git.io/antigen
+  git:
+    repo: https://github.com/zsh-users/antigen.git
     dest: "{{ zsh_antigen_path }}/antigen"
-    mode: 0755
-    owner: "{{ zsh_user }}"
-    group: "{{ zsh_user_group }}"
-  # become: true
+    version: "{{ zsh_antigen_version }}"
+    force: true
+  become: true
   # become_user: "{{ zsh_user }}"
   register: zsh_register_antigen_clone
 
