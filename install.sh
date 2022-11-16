@@ -15,14 +15,14 @@ sudo pip3 install ansible
 # title "Install viasite-ansible.zsh"
 # ansible-galaxy install viasite-ansible.zsh --force
 
-title "Download playbook to /tmp/zsh.yml"
-curl https://raw.githubusercontent.com/bruvv/ansible-role-zsh/master/playbook.yml >/tmp/zsh.yml
+title "Download ansible-to-zsh to /tmp/zsh.yml"
+git clone https://github.com/bruvv/ansible-role-zsh.git /tmp/zsh
 
 title "Provision playbook for root"
-ansible-playbook -i "localhost," -c local -b /tmp/zsh.yml
+ansible-playbook -i "localhost," -c local -b /tmp/zsh/zsh.yml
 
 title "Provision playbook for $(whoami)"
-ansible-playbook -i "localhost," -c local -b /tmp/zsh.yml --extra-vars="zsh_user=$(whoami)"
+ansible-playbook -i "localhost," -c local -b /tmp/zsh/zsh.yml --extra-vars="zsh_user=$(whoami)"
 
 title "Finished! Please, restart your shell."
 echo ""
