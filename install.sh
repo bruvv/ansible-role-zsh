@@ -15,7 +15,7 @@ sudo pip3 install ansible
 # title "Install viasite-ansible.zsh"
 # ansible-galaxy install viasite-ansible.zsh --force
 
-title "Download ansible-to-zsh to /tmp/zsh.yml"
+title "Download ansible-to-zsh to /tmp/zsh"
 git clone https://github.com/bruvv/ansible-role-zsh.git /tmp/zsh
 
 title "Provision playbook for root"
