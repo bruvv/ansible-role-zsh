@@ -105,7 +105,7 @@ gnome-terminal have built-in Solarized Dark, note that you should select both ba
 
 ### Hotkeys
 
-You can view hotkeys in [roles/zsh-install/defaults/main.yml](defaults/main.yml), `zsh_hotkeys`.
+You can view hotkeys in [roles/zsh-install/defaults/main.yml](roles/zsh-install/defaults/main.yml), `zsh_hotkeys`.
 
 Sample hotkey definitions:
 
@@ -163,7 +163,7 @@ zsh_aliases:
 
 ## Configure bundles
 
-You can check default bundles in [roles/zsh-install/defaults/main.yml](defaults/main.yml#L37).
+You can check default bundles in [roles/zsh-install/defaults/main.yml](roles/zsh-install/defaults/main.yml#L37).
 If you like default bundles, but you want to add your bundles, use `zsh_antigen_bundles_extras` variable (see example playbook above).
 If you want to remove some default bundles, you should use `zsh_antigen_bundles` variable.
 
