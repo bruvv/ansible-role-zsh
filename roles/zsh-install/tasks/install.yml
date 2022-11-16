@@ -15,6 +15,7 @@
       - wget
       - thefuck
       - fzf
+      - autojump
     state: present
   # brew don't work from root user on macOS
   become: "{{ ansible_distribution != 'MacOSX' }}"
