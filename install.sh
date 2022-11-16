@@ -4,7 +4,7 @@ set -eu
 title() {
     local color='\033[1;37m'
     local nc='\033[0m'
-    printf "\n%s" "${color}$1${nc}"
+    printf "\n${color}$1${nc}"
 }
 
 title "Install pip and Ansible"
