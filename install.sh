@@ -13,8 +13,7 @@ case "$(uname -sr)" in
 
 Darwin*)
     echo 'Running Mac OS stuff'
-    which -s brew
-    if [[ $? != 0 ]]; then
+    if ! which -s brew; then
         # Install Homebrew
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     else
