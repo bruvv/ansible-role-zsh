@@ -4,7 +4,7 @@ set -eu
 title() {
     local color='\033[1;37m'
     local nc='\033[0m'
-    printf "\n${color}$1${nc}"
+    printf "\n${color}%s${nc}" "$1"
 }
 
 title "Install pip and Ansible"
@@ -71,5 +71,5 @@ CYGWIN* | MINGW* | MINGW32* | MSYS*)
     ;;
 esac
 
-title "Finished! Please, restart your shell."
+title "Finished! Please, restart your shell. And run p10k configure"
 echo ""
