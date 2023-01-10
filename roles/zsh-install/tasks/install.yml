@@ -63,14 +63,6 @@
   # become_user: "{{ zsh_user }}"
   register: zsh_register_antigen_clone
 
-- name: Check fzf installed
-  command: which fzf
-  changed_when: false
-  failed_when: false
-  check_mode: no
-  register: zsh_register_fzf_command
-  when: not (ansible_facts['distribution'] == 'Rocky')
-
 - name: Set zsh_fzf_path to /usr/local/bin
   set_fact:
     zsh_fzf_path: /usr/local/bin
@@ -99,7 +91,7 @@
     remote_src: true
     creates: '{{ zsh_fzf_path_absolute }}/fzf'
   become: true
-  when: zsh_register_fzf_command.rc == 1 and not (ansible_facts['distribution'] == 'Rocky')
+  when: not (ansible_facts['distribution'] == 'Rocky')
 
 - name: Set directory permissions
   file:
