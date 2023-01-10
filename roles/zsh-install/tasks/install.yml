@@ -27,6 +27,7 @@
       - zsh
       - tmux
       - git
+      - python3-pip
       - wget
       - autojump
     state: present
