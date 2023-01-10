@@ -1,11 +1,14 @@
 ---
-on: push
+on:
+  - push
 
 jobs:
-  molecule:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v3
         with:
           path: '${{ github.repository }}'
-      - uses: gofrolist/molecule-action@v2
+      - name: molecule
+        uses: robertdebock/molecule-action@5.0.0
