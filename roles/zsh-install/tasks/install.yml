@@ -19,26 +19,39 @@
     state: present
   # brew don't work from root user on macOS
   become: "{{ ansible_distribution != 'MacOSX' }}"
-  when: not (zsh_user == 'root')
+  when: not (zsh_user == 'root') and not (ansible_facts['distribution'] == 'Rocky')
+
+- name: Installing system packages
+  package:
+    name:
+      - zsh
+      - tmux
+      - git
+      - wget
+      - autojump
+    state: present
+  # brew don't work from root user on macOS
+  become: "{{ ansible_distribution != 'MacOSX' }}"
+  when: not (zsh_user == 'root') and ansible_facts['distribution'] == 'Rocky'
 
 - name: check if {{zsh_antigen_path}} exist
   stat:
-    path: "{{zsh_antigen_path}}"
+    path: '{{zsh_antigen_path}}'
   register: zsh_antigen_path_present
 
 - name: create direcoty {{zsh_antigen_path}}
   become: true
   file:
-    dest: "{{zsh_antigen_path}}"
-    mode: "0755"
+    dest: '{{zsh_antigen_path}}'
+    mode: '0755'
     state: directory
   when: not zsh_antigen_path_present.stat.exists
 
 - name: Clone antigen {{ zsh_antigen_version }}
   git:
     repo: https://github.com/zsh-users/antigen.git
-    dest: "{{ zsh_antigen_path }}/antigen"
-    version: "{{ zsh_antigen_version }}"
+    dest: '{{ zsh_antigen_path }}/antigen'
+    version: '{{ zsh_antigen_version }}'
     force: true
   become: true
   # become_user: "{{ zsh_user }}"
@@ -64,27 +77,27 @@
 
 - name: Ensure users home binary folder is present
   file:
-    path: "{{ zsh_fzf_path_absolute }}"
-    owner: "{{ zsh_user }}"
-    group: "{{ zsh_user_group }}"
+    path: '{{ zsh_fzf_path_absolute }}'
+    owner: '{{ zsh_user }}'
+    group: '{{ zsh_user_group }}'
     mode: u=rwx,g=rwx,o=rx
     state: directory
   when: not zsh_shared
 
-- name: "Download fzf to {{ zsh_fzf_path_absolute }}"
+- name: 'Download fzf to {{ zsh_fzf_path_absolute }}'
   unarchive:
-    src: "{{ zsh_fzf_url }}"
-    dest: "{{ zsh_fzf_path_absolute }}"
+    src: '{{ zsh_fzf_url }}'
+    dest: '{{ zsh_fzf_path_absolute }}'
     remote_src: true
-    creates: "{{ zsh_fzf_path_absolute }}/fzf"
+    creates: '{{ zsh_fzf_path_absolute }}/fzf'
   become: true
   when: zsh_register_fzf_command.rc == 1
 
 - name: Set directory permissions
   file:
-    name: "{{ zsh_antigen_path }}"
-    owner: "{{ zsh_user }}"
-    group: "{{ zsh_user_group }}"
+    name: '{{ zsh_antigen_path }}'
+    owner: '{{ zsh_user }}'
+    group: '{{ zsh_user_group }}'
     recurse: true
   become: true
   changed_when: false
