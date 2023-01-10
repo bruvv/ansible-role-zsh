@@ -34,6 +34,11 @@
   become: "{{ ansible_distribution != 'MacOSX' }}"
   when: not (zsh_user == 'root') and ansible_facts['distribution'] == 'Rocky'
 
+- name: Installing rocky system packages
+  ansible.builtin.pip:
+    name: thefuck
+  when: not (zsh_user == 'root') and ansible_facts['distribution'] == 'Rocky'
+
 - name: check if {{zsh_antigen_path}} exist
   stat:
     path: '{{zsh_antigen_path}}'
@@ -63,17 +68,19 @@
   failed_when: false
   check_mode: no
   register: zsh_register_fzf_command
+  when: not (ansible_facts['distribution'] == 'Rocky')
 
 - name: Set zsh_fzf_path to /usr/local/bin
   set_fact:
     zsh_fzf_path: /usr/local/bin
   changed_when: false
-  when: zsh_shared
+  when: zsh_shared and not (ansible_facts['distribution'] == 'Rocky')
 
 - name: Set zsh_fzf_path_absolute
   set_fact:
     zsh_fzf_path_absolute: "{{ zsh_fzf_path | replace('$HOME', '~' + zsh_user) }}"
   changed_when: false
+  when: not (ansible_facts['distribution'] == 'Rocky')
 
 - name: Ensure users home binary folder is present
   file:
@@ -82,7 +89,7 @@
     group: '{{ zsh_user_group }}'
     mode: u=rwx,g=rwx,o=rx
     state: directory
-  when: not zsh_shared
+  when: not zsh_shared and not (ansible_facts['distribution'] == 'Rocky')
 
 - name: 'Download fzf to {{ zsh_fzf_path_absolute }}'
   unarchive:
@@ -91,7 +98,7 @@
     remote_src: true
     creates: '{{ zsh_fzf_path_absolute }}/fzf'
   become: true
-  when: zsh_register_fzf_command.rc == 1
+  when: zsh_register_fzf_command.rc == 1 and not (ansible_facts['distribution'] == 'Rocky')
 
 - name: Set directory permissions
   file:

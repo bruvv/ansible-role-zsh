@@ -103,6 +103,7 @@ alias '{{ alias.alias }}'="{{ alias.action }}"
 {% endfor %}
 
 # fzf
+{% if not (ansible_facts['distribution'] == 'Rocky') %}
 export FZF_TMUX=0
 export FZF_DEFAULT_OPTS="{{ zsh_fzf_default_opts }}"
 
@@ -113,6 +114,7 @@ add-zsh-hook chpwd chpwd_recent_dirs
 {% endif %}
 declare -p FZF_WIDGETS_OPTS > /dev/null 2>&1 && FZF_WIDGETS_OPTS[insert-history]="{{ zsh_fzf_ctrl_r_opts }}"
 declare -p FZF_WIDGET_OPTS > /dev/null 2>&1 && FZF_WIDGET_OPTS[insert-history]="{{ zsh_fzf_ctrl_r_opts }}"
+{% endif %}
 
 # zsh-autosuggestions
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE={{ zsh_autosuggestions_max_length }}
