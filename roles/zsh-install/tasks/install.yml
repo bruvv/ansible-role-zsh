@@ -5,7 +5,7 @@
   become: true
   when: ansible_os_family != 'Darwin'
 
-- name: Installing system packages
+- name: Installing debian system packages
   package:
     name:
       - zsh
@@ -21,7 +21,7 @@
   become: "{{ ansible_distribution != 'MacOSX' }}"
   when: not (zsh_user == 'root') and not (ansible_facts['distribution'] == 'Rocky')
 
-- name: Installing system packages
+- name: Installing rocky system packages
   package:
     name:
       - zsh
