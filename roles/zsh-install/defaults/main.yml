@@ -31,7 +31,6 @@ zsh_antigen_bundles:
   - thefuck
   - ansible
   - terraform
-  - fzf
   - navi
   - tmux
   - autojump
