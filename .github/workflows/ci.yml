@@ -25,7 +25,6 @@ jobs:
       - name: 🚀 Run yamllint
         uses: frenck/action-yamllint@v1
         with:
-          config: '/.github/.yamllint.yml'
           warnings: false
 
   molecule:
