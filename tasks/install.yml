@@ -13,7 +13,6 @@
   package:
     name:
       - zsh
-      - gnu-tar
       - tmux
       - git
       - wget
@@ -42,7 +41,7 @@
 - name: Installing rocky system packages
   ansible.builtin.pip:
     name: thefuck
-  when: not (zsh_user == 'root') and ansible_os_family == 'Rocky'
+  when: ansible_os_family == 'RedHat'
 
 - name: check if {{zsh_antigen_path}} exist
   stat:
