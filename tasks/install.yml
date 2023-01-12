@@ -23,7 +23,7 @@
     state: present
   # brew don't work from root user on macOS
   become: "{{ ansible_distribution != 'MacOSX' }}"
-  when: not (zsh_user == 'root') and ansible_os_family == 'Debian'
+  when: ansible_os_family == 'Debian'
 
 - name: Installing rocky system packages
   package:
@@ -37,7 +37,7 @@
     state: present
   # brew don't work from root user on macOS
   become: "{{ ansible_distribution != 'MacOSX' }}"
-  when: not (zsh_user == 'root') and ansible_os_family == 'Rocky'
+  when: ansible_os_family == 'Rocky'
 
 - name: Installing rocky system packages
   ansible.builtin.pip:
