@@ -22,17 +22,11 @@ jobs:
         with:
           path: 'bruvv.zsh_antigen'
 
-      - name: Set up Python 3.
-        uses: actions/setup-python@v2
+      - name: yaml-lint
+        uses: ibiqlik/action-yamllint@v3
         with:
-          python-version: '3.x'
+          config_file: .github/yamllint.yml
 
-      - name: Install test dependencies.
-        run: pip3 install yamllint
-
-      - name: Lint code.
-        run: |
-          yamllint .
   molecule:
     name: Molecule
     runs-on: ubuntu-latest
