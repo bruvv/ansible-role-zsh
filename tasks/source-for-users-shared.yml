@@ -9,6 +9,7 @@
   register: zsh_users
   when: not (ansible_os_family == 'MacOSX') and paths is defined and paths.stdout != ""
   changed_when: false
+
 - name: Format user list
   set_fact:
     zsh_list_users: "{{['root','root'] + zsh_users.stdout.splitlines()| list}}"

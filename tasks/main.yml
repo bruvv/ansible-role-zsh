@@ -22,7 +22,7 @@
   tags:
     - zsh
     - install
-  when: zsh_shared and zsh_source_for_all_users
+  when: zsh_shared or zsh_source_for_all_users
 
 - name: Reset antigen cache
   command: "timeout 10s /bin/zsh -c 'source {{ zsh_config }}; antigen reset'"

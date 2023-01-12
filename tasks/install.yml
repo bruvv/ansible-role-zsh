@@ -3,7 +3,7 @@
   package:
     update_cache: true
   become: true
-  when: ansible_os_family != 'Darwin'
+  when: ansible_os_family != 'MacOSX'
 
 - name: Installing debian system packages
   package:
@@ -66,13 +66,13 @@
   set_fact:
     zsh_fzf_path: /usr/local/bin
   changed_when: false
-  when: zsh_shared and not (ansible_facts['distribution'] == 'Rocky')
+  when: zsh_shared and not (ansible_os_family == 'RedHat')
 
 - name: Set zsh_fzf_path_absolute
   set_fact:
     zsh_fzf_path_absolute: "{{ zsh_fzf_path | replace('$HOME', '~' + zsh_user) }}"
   changed_when: false
-  when: not (ansible_facts['distribution'] == 'Rocky')
+  when: not (ansible_os_family == 'RedHat')
 
 - name: Ensure users home binary folder is present
   file:
@@ -81,7 +81,7 @@
     group: '{{ zsh_user_group }}'
     mode: u=rwx,g=rwx,o=rx
     state: directory
-  when: not zsh_shared and not (ansible_facts['distribution'] == 'Rocky')
+  when: not zsh_shared and not (ansible_os_family == 'RedHat')
 
 - name: 'Download fzf to {{ zsh_fzf_path_absolute }}'
   unarchive:
@@ -90,7 +90,7 @@
     remote_src: true
     creates: '{{ zsh_fzf_path_absolute }}/fzf'
   become: true
-  when: not (ansible_facts['distribution'] == 'Rocky')
+  when: not (ansible_os_family == 'RedHat')
 
 - name: Set directory permissions
   file:
