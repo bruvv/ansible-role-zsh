@@ -21,7 +21,7 @@ jobs:
         distro:
           - rockylinux8
           - ubuntu2204
-          - ubunu2004
+          - ubuntu2004
           - debian11
           - fedora34
 
