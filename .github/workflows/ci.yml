@@ -22,10 +22,11 @@ jobs:
         with:
           path: 'bruvv.zsh_antigen'
 
-      - name: yaml-lint
-        uses: ibiqlik/action-yamllint@v3
+      - name: 🚀 Run yamllint
+        uses: frenck/action-yamllint@v1
         with:
-          config_file: .yamllint.yml
+          config: './.github/.yamllint'
+          warnings: false
 
   molecule:
     name: Molecule
