@@ -1,24 +1,28 @@
 ---
 galaxy_info:
-  role_name: ansible_role_zsh_antigen
+  role_name: zsh_antigen
   author: bruvv
   description: oh-my-zsh with powerlevel9k theme, thefuck and other plugins
   company: Dronevlieger
-  license: MIT
+  license: license (BSD, MIT)
   min_ansible_version: '2.0'
   platforms:
-    - name: Ubuntu
-      versions:
-        - trusty
-        - xenial
-    - name: Debian
-      versions:
-        - squeeze
-        - wheezy
-        - jessie
     - name: EL
       versions:
-        - '7'
+        - 7
+        - 8
+    - name: Fedora
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+        - jammy
     - name: MacOSX
       versions:
         - '10.12'
@@ -28,7 +32,4 @@ galaxy_info:
     - user
     - zsh
 
-dependencies:
-  []
-  # List your role dependencies here, one per line. Be sure to remove the '[]' above,
-  # if you add dependencies to this list.
+dependencies: []
