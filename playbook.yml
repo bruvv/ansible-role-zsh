@@ -8,4 +8,4 @@
     # your variables here
     # zsh_autosuggestions_bind_key: "^U"
   roles:
-    - { role: "zsh-install", become: true }
+    - { role: "bruvv.zsh_antigen", become: true }
