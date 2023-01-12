@@ -35,7 +35,7 @@
   when: ansible_os_family == 'RedHat'
 
 - name: Installing rocky system packages
-  ansible.builtin.ansible.builtin.pip:
+  ansible.builtin.pip:
     name: thefuck
   when: ansible_os_family == 'RedHat'
 
