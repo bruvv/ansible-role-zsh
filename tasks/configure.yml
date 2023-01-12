@@ -63,7 +63,6 @@
     name: "{{ zsh_user }}"
     shell: /bin/zsh
   become: true
-  become_user: "{{ zsh_user }}"
   when: not zsh_shared and zsh_change_user_shell
 
 - name: Add skip_global_compinit for disable early compinit call in Ubuntu

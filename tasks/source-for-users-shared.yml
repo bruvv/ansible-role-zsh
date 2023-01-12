@@ -1,7 +1,7 @@
 - name: Get Ubuntu/Debian users's home path
   ansible.builtin.shell: |
     set -o pipefail
-    "egrep '^.*:.*:[1-9][0-9]{3,4}:.*:.*:.*:.*(bash|zsh)$' /etc/passwd | awk -F: '{print $6}'"
+    egrep '^.*:.*:[1-9][0-9]{3,4}:.*:.*:.*:.*(bash|zsh)$' /etc/passwd | awk -F: '{print $6}'
   register: paths
   when: not (ansible_os_family == 'MacOSX')
   changed_when: false
@@ -9,7 +9,7 @@
 - name: Get Ubuntu/Debian users
   ansible.builtin.shell: |
     set -o pipefail
-    "egrep '^.*:.*:[1-9][0-9]{3,4}:.*:.*:.*:.*(bash|zsh)$' /etc/passwd | awk -F: '{print $1}'"
+    egrep '^.*:.*:[1-9][0-9]{3,4}:.*:.*:.*:.*(bash|zsh)$' /etc/passwd | awk -F: '{print $1}'
   register: zsh_users
   when: not (ansible_os_family == 'MacOSX') and paths is defined and paths.stdout != ""
   changed_when: false
