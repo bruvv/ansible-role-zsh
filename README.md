@@ -5,7 +5,7 @@ Tested on Ubuntu 22.04, macOS 13.0.1.
 If you using Ubuntu or Debian and not familiar with Ansible, you can just execute [install.sh](install.sh) on target machine:
 
 ```
-curl https://raw.githubusercontent.com/bruvv/ansible-role-zsh/master/install.sh | bash
+curl https://raw.githubusercontent.com/bruvv/ansible-role-zsh/main/install.sh | bash
 ```
 
 Then [configure terminal application](#configure-terminal-application).
