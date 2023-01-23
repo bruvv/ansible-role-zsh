@@ -24,7 +24,7 @@
         'degraded' in systemctl_status.stdout
       retries: 30
       delay: 5
-      when: not ansible_check_mode or ansible_os_family != 'MacOSX'
+      when: ansible_service_mgr == 'systemd'
       changed_when: false
       failed_when: systemctl_status.rc > 1
 
