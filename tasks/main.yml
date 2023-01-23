@@ -20,9 +20,6 @@
 
 - name: Enabled for more users
   ansible.builtin.include_tasks: source-for-users-shared.yml
-  tags:
-    - zsh
-    - install
   when: zsh_shared or zsh_source_for_all_users
 
 - name: Reset antigen cache

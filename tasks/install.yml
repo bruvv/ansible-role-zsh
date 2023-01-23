@@ -39,7 +39,7 @@
     name: thefuck
   when: ansible_os_family == 'RedHat'
 
-- name: Check if ntigen path exist
+- name: Check if antigen path exist
   ansible.builtin.stat:
     path: "{{ zsh_antigen_path }}"
   register: zsh_antigen_path_present
