@@ -27,7 +27,6 @@ scenario:
     - prepare
     - converge
     - idempotence
-    - check
     - side_effect
     - verify
     - destroy
