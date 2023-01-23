@@ -1,35 +1,40 @@
-- name: Get Ubuntu/Debian users's home path
+- name: Get users's home path
   ansible.builtin.shell: |
     set -o pipefail
     egrep '^.*:.*:[1-9][0-9]{3,4}:.*:.*:.*:.*(bash|zsh)$' /etc/passwd | awk -F: '{print $6}'
   register: paths
-  when: not (ansible_os_family == 'MacOSX')
   changed_when: false
 
-- name: Get Ubuntu/Debian users
+- name: Get users
   ansible.builtin.shell: |
     set -o pipefail
     egrep '^.*:.*:[1-9][0-9]{3,4}:.*:.*:.*:.*(bash|zsh)$' /etc/passwd | awk -F: '{print $1}'
   register: zsh_users
-  when: not (ansible_os_family == 'MacOSX') and paths is defined and paths.stdout != ""
+  when: paths is defined and paths.stdout != ""
   changed_when: false
 
 - name: Format user list
   ansible.builtin.set_fact:
     zsh_list_users: "{{ ['root', 'root'] + zsh_users.stdout.splitlines() | list }}"
-  when: not (ansible_os_family == 'MacOSX') and paths is defined and paths.stdout != ""
+  when: paths is defined and paths.stdout != ""
 
 - name: Merge the users path and root/skel to list
   ansible.builtin.set_fact:
     allpaths: "{{ ['/root', '/etc/skel'] + paths.stdout.splitlines() | list }}"
-  when: zsh_shared and paths is defined and paths.stdout != ""
+  when: paths is defined and paths.stdout != ""
 
-- name: Use only root/skel for the list (no users found)
-  ansible.builtin.set_fact:
-    allpaths: "{{ ['/root', '/etc/skel'] }}"
-  when: paths is defined and paths.stdout == ""
+- name: Write .zshrc config for all users
+  ansible.builtin.template:
+    src: zshrc.j2
+    mode: 0755
+    dest: "{{ zsh_config }}"
+    owner: "{{ zsh_user }}"
+    group: "{{ zsh_user_group }}"
+    backup: true
+  loop: "{{ allpaths }}"
+  when: not zsh_shared and zsh_change_user_shell and allpaths is defined
 
-- name: Install .zshrc in {{ allpaths | join(',') }}
+- name: Install .zshrc shared between users
   ansible.builtin.copy:
     content: source /usr/share/zsh-config/.zshrc
     dest: "{{ item }}/.zshrc"
@@ -39,4 +44,4 @@
   loop_control:
     index_var: id
   become: true
-  when: allpaths is defined
+  when: zsh_shared and allpaths is defined
