@@ -19,12 +19,11 @@ jobs:
     strategy:
       matrix:
         distro:
-          - macos-latest
           - rockylinux9
           - rockylinux8
+          - centos7
           - ubuntu2204
           - debian11
-
     steps:
       - name: Check out the codebase.
         uses: actions/checkout@v3
