@@ -21,7 +21,6 @@ jobs:
         distro:
           - rockylinux9
           - rockylinux8
-          - centos7
           - ubuntu2204
           - debian11
     steps:
