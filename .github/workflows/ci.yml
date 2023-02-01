@@ -17,10 +17,10 @@ jobs:
     strategy:
       matrix:
         distro:
-          - rockylinux9
-          - rockylinux8
+          # - rockylinux9
+          # - rockylinux8
           - ubuntu2204
-          - debian11
+          # - debian11
     steps:
       - name: Check out the codebase.
         uses: actions/checkout@v3
@@ -42,7 +42,7 @@ jobs:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
           MOLECULE_DISTRO: ${{ matrix.distro }}
-  tag:
+  release:
     needs: molecule
     runs-on: ubuntu-latest
     steps:
@@ -51,6 +51,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN}}
           with-v: true
       - name: galaxy
-        uses: robertdebock/galaxy-action@1.2.0
+        uses: robertdebock/galaxy-action@1.2.1
         with:
           galaxy_api_key: ${{ secrets.galaxy_api_key }}
