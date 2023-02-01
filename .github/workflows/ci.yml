@@ -50,3 +50,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN}}
           with-v: true
+      - name: galaxy
+        uses: robertdebock/galaxy-action@1.2.0
+        with:
+          galaxy_api_key: ${{ secrets.galaxy_api_key }}
