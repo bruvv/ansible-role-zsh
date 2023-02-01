@@ -31,6 +31,7 @@ Darwin*)
     done
     title "Download ansible-to-zsh to /tmp/zsh"
     git clone https://github.com/bruvv/ansible-role-zsh.git /tmp/zsh
+    ansible-galaxy install bruvv.zsh_antigen
 
     title "Provision playbook for root"
     ansible-playbook -i "localhost," -c local -b /tmp/zsh/playbook.yml --extra-vars="zsh_user=$(whoami)" --ask-become-pass
@@ -49,6 +50,7 @@ Linux*)
     sudo apt install ansible -yqq
     title "Download ansible-to-zsh to /tmp/zsh"
     git clone https://github.com/bruvv/ansible-role-zsh.git /tmp/zsh
+    ansible-galaxy install bruvv.zsh_antigen
 
     title "Provision playbook for root"
     ansible-playbook -i "localhost," -c local -b /tmp/zsh/playbook.yml
