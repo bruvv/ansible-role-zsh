@@ -5,8 +5,6 @@ name: CI
   push:
     branches:
       - main
-  schedule:
-    - cron: "0 7 * * 0"
 
 defaults:
   run:
@@ -35,7 +33,9 @@ jobs:
           python-version: "3.x"
 
       - name: Install test dependencies.
-        run: pip3 install ansible molecule[docker] docker
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install ansible docker 'molecule[docker]' ansible-lint yamllint flake8
 
       - name: Run Molecule tests.
         run: molecule test
@@ -43,3 +43,12 @@ jobs:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
           MOLECULE_DISTRO: ${{ matrix.distro }}
+
+      - name: Get the version name from the tags
+        run: echo "RELEASE_VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+
+      - name: Injecting a dynamic Collection version
+        uses: artis3n/ansible_galaxy_collection@v2
+        with:
+          api_key: "${{ secrets.GALAXY_API_KEY }}"
+          galaxy_version: "${{ env.RELEASE_VERSION }}"
