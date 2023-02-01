@@ -5,6 +5,7 @@ galaxy_info:
   description: oh-my-zsh with powerlevel10k theme, thefuck and other plugins
   company: Dronevlieger
   license: license (BSD, MIT)
+  github_branch: main
   min_ansible_version: "2.10"
   platforms:
     - name: EL
