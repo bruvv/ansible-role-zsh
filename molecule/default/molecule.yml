@@ -19,5 +19,4 @@ scenario:
     - destroy
     - syntax
     - create
-    - converge
     - destroy

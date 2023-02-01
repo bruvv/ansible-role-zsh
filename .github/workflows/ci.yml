@@ -37,6 +37,10 @@ jobs:
           python3 -m pip install --upgrade pip
           pip3 install ansible docker 'molecule[docker]' ansible-lint yamllint flake8
 
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
       - name: Run Molecule tests.
         run: molecule test
         env:
