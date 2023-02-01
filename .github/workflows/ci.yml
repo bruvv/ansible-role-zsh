@@ -36,17 +36,19 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
           pip3 install ansible docker 'molecule[docker]' ansible-lint yamllint flake8
-
-  release:
-    name: Release
-    runs-on: ubuntu-latest
-    steps:
       - name: Run Molecule tests.
         run: molecule test
         env:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
           MOLECULE_DISTRO: ${{ matrix.distro }}
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v3
       - uses: phish108/autotag-action@1.1.53
         with:
           github-token: ${{ secrets.GITHUB_TOKEN}}
