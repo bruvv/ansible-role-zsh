@@ -1,14 +1,10 @@
 - name: Get users's home path
-  ansible.builtin.shell: |
-    set -o pipefail
-    egrep '^.*:.*:[1-9][0-9]{3,4}:.*:.*:.*:.*(bash|zsh)$' /etc/passwd | awk -F: '{print $6}'
+  ansible.builtin.shell: "egrep '^.*:.*:[1-9][0-9]{3,4}:.*:.*:.*:.*(bash|zsh)$' /etc/passwd | awk -F: '{print $6}'"
   register: paths
   changed_when: false
 
 - name: Get users
-  ansible.builtin.shell: |
-    set -o pipefail
-    egrep '^.*:.*:[1-9][0-9]{3,4}:.*:.*:.*:.*(bash|zsh)$' /etc/passwd | awk -F: '{print $1}'
+  ansible.builtin.shell: "egrep '^.*:.*:[1-9][0-9]{3,4}:.*:.*:.*:.*(bash|zsh)$' /etc/passwd | awk -F: '{print $1}'"
   register: zsh_users
   when: paths is defined and paths.stdout != ""
   changed_when: false
