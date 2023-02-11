@@ -3,7 +3,7 @@
   ansible.builtin.package:
     update_cache: true
   become: true
-  when: ansible_os_family != 'MacOSX'
+  when: ansible_os_family != 'Darwin'
 
 - name: Installing debian system packages
   ansible.builtin.package:
@@ -17,7 +17,7 @@
       - autojump
     state: present
   # brew don't work from root user on macOS
-  become: "{{ ansible_distribution != 'MacOSX' }}"
+  become: "{{ ansible_os_family != 'Darwin' }}"
   when: ansible_os_family == 'Debian'
 
 - name: Installing rocky system packages
@@ -31,7 +31,7 @@
       - autojump
     state: present
   # brew don't work from root user on macOS
-  become: "{{ ansible_distribution != 'MacOSX' }}"
+  become: "{{ ansible_os_family != 'Darwin' }}"
   when: ansible_os_family == 'RedHat'
 
 - name: Installing rocky system packages

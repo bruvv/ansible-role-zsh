@@ -23,7 +23,7 @@
   tags:
     - zsh
     - install
-  when: zsh_shared or zsh_source_for_all_users and not (ansible_os_family == 'MacOSX')
+  when: zsh_shared or zsh_source_for_all_users and not (ansible_os_family == 'Darwin')
 
 - name: Reset antigen cache
   ansible.builtin.command: "timeout 10s /bin/zsh -c 'source {{ zsh_config }}; antigen reset'"
