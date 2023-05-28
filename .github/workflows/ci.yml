@@ -50,7 +50,7 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - uses: phish108/autotag-action@1.1.53
+      - uses: phish108/autotag-action@v1.1.64
         with:
           github-token: ${{ secrets.GITHUB_TOKEN}}
           with-v: true
