@@ -31,6 +31,9 @@ Darwin*)
         fi
     done
     title "Download ansible-to-zsh to /tmp/zsh"
+    if [ -d /tmp/zsh ]; then
+        rm -rf /tmp/zsh
+    fi
     git clone https://github.com/bruvv/ansible-role-zsh.git /tmp/zsh
     ansible-galaxy install bruvv.zsh_antigen --force
 
