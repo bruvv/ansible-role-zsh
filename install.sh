@@ -14,17 +14,18 @@ case "$(uname -sr)" in
 Darwin*)
     echo 'Running Mac OS stuff'
     if ! which -s brew; then
-        # Install Homebrew
+        echo "Install Homebrew"
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     else
         brew update
     fi
-    brew_install=(ansible)
+    brew_install=(ansible gnu-tar)
+
     for i in "${brew_install[@]}"; do
         printf "\nInstalling %s" "$i"
-        if brew list "$i" &>/dev/null; then
-            echo -e "\n${i} is already installed, updating package"
-            brew upgrade "$i"
+        if ! brew list "$i" &>/dev/null; then
+            echo -e "\n${i} is not installed, installing package"
+            brew install "$i" && echo "$i is installed"
         else
             brew install "$i" && echo "$i is installed"
         fi
