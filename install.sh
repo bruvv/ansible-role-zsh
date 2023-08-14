@@ -26,8 +26,6 @@ Darwin*)
         if ! brew list "$i" &>/dev/null; then
             echo -e "\n${i} is not installed, installing package"
             brew install "$i" && echo "$i is installed"
-        else
-            brew install "$i" && echo "$i is installed"
         fi
     done
     title "Download ansible-to-zsh to /tmp/zsh"
