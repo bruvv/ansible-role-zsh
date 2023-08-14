@@ -19,7 +19,7 @@ Darwin*)
     else
         brew update
     fi
-    brew_install=(ansible gnu-tar)
+    brew_install=(ansible gnu-tar thefuck autojump)
 
     for i in "${brew_install[@]}"; do
         if ! brew list "$i" &>/dev/null; then

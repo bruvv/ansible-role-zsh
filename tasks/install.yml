@@ -15,6 +15,7 @@
       - thefuck
       - fzf
       - autojump
+      - fd-find
     state: present
   # brew don't work from root user on macOS
   become: "{{ ansible_os_family != 'Darwin' }}"
@@ -29,6 +30,7 @@
       - python3-pip
       - wget
       - autojump
+      - fd-find
     state: present
   # brew don't work from root user on macOS
   become: "{{ ansible_os_family != 'Darwin' }}"
