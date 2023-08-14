@@ -22,7 +22,6 @@ Darwin*)
     brew_install=(ansible gnu-tar)
 
     for i in "${brew_install[@]}"; do
-        printf "\nInstalling %s" "$i"
         if ! brew list "$i" &>/dev/null; then
             echo -e "\n${i} is not installed, installing package"
             brew install "$i" && echo "$i is installed"
@@ -75,5 +74,5 @@ CYGWIN* | MINGW* | MINGW32* | MSYS*)
     ;;
 esac
 
-title "Finished! Please, restart your shell. And run p10k configure"
+title "Finished! Please, restart your shell."
 echo ""
