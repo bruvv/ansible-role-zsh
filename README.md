@@ -85,7 +85,7 @@ Add your custom config to `~/.zshrc.local` (per user) or `/etc/zshrc.local` (glo
 
 2. Set color scheme.
 
-Personaly, I prefer Solarized Dark color sceme, Droid Sans Mono for Powerline in iTerm and DejaVu Sans Mono in Putty.
+    Personaly, I prefer Solarized Dark color sceme, Droid Sans Mono for Powerline in iTerm and DejaVu Sans Mono in Putty.
 
 #### iTerm
 
@@ -180,25 +180,25 @@ Note that bundles can use conditions for load. There are two types of conditions
 
 1. Command conditions. Just add `command` to bundle:
 
-```yaml
-- { name: docker, command: docker }
-- name: docker-compose
-  command: docker-compose
-```
+    ```yaml
+    - { name: docker, command: docker }
+    - name: docker-compose
+      command: docker-compose
+    ```
 
-Bundles `docker` and `docker-compose` will be added to config only if commands exists on target system.
+    Bundles `docker` and `docker-compose` will be added to config only if commands exists on target system.
 
 2. When conditions. You can define any ansible conditions as you define in `when` in tasks:
 
-```yaml
-# load only for zsh >= 4.3.17
-- name: zsh-users/zsh-syntax-highlighting
-  when: "{{ zsh_version is version_compare('4.3.17', '>=') }}"
-# load only for macOS
-- { name: brew, when: "{{ ansible_os_family != 'Darwin' }}" }
-```
+    ```yaml
+    # load only for zsh >= 4.3.17
+    - name: zsh-users/zsh-syntax-highlighting
+      when: "{{ zsh_version is version_compare('4.3.17', '>=') }}"
+    # load only for macOS
+    - { name: brew, when: "{{ ansible_os_family != 'Darwin' }}" }
+    ```
 
-Note: you should wrap condition in `"{{ }}"`
+    Note: you should wrap condition in `"{{ }}"`
 
 ## Custom config
 
