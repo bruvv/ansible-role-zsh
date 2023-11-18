@@ -2,3 +2,4 @@
 00aptproxy
 .vagrant
 .DS_STORE
+.vscode
