@@ -17,8 +17,8 @@ jobs:
     strategy:
       matrix:
         distro:
-          # - rockylinux9
-          # - rockylinux8
+          - rockylinux9
+          - rockylinux8
           - ubuntu2204
           - debian11
     steps:
@@ -35,7 +35,7 @@ jobs:
       - name: Install test dependencies.
         run: |
           python3 -m pip install --upgrade pip
-          pip3 install ansible docker 'molecule[docker]' ansible-lint yamllint flake8
+          pip3 install ansible docker 'molecule-plugins[docker]' ansible-lint yamllint flake8
 
       - name: Run Molecule tests.
         run: molecule test

@@ -32,7 +32,7 @@ Darwin*)
         rm -rf /tmp/zsh
     fi
     git clone https://github.com/bruvv/ansible-role-zsh.git /tmp/zsh
-    ansible-galaxy install bruvv.zsh_antigen geerlingguy.mac --force
+    # ansible-galaxy install bruvv.zsh_antigen --force
 
     title "Provision playbook for root"
     ansible-playbook -i "localhost," -c local -b /tmp/zsh/playbook.yml --extra-vars="zsh_user=$(whoami)" --ask-become-pass
