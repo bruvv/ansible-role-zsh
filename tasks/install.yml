@@ -43,7 +43,7 @@
 
 - name: Clone antigen {{ zsh_antigen_version }}
   ansible.builtin.git:
-    repo: git.io/antigen
+    repo: https://github.com/zsh-users/antigen.git
     dest: "{{ zsh_antigen_path }}/antigen"
     version: "{{ zsh_antigen_version }}"
     force: true
@@ -60,7 +60,7 @@
   ansible.builtin.set_fact:
     zsh_fzf_path_absolute: "{{ zsh_fzf_path | replace('$HOME', '~' + zsh_user) }}"
   changed_when: false
-  when: not (ansible_os_family == 'RedHat') and fzf
+  when: fzf and not (ansible_os_family == 'RedHat')
 
 - name: Ensure users home binary folder is present
   ansible.builtin.file:
@@ -69,7 +69,7 @@
     group: "{{ zsh_user_group }}"
     mode: u=rwx,g=rwx,o=rx
     state: directory
-  when: not zsh_shared and not (ansible_os_family == 'RedHat')
+  when: fzf and not zsh_shared and not (ansible_os_family == 'RedHat')
 
 - name: "Download fzf to {{ zsh_fzf_path_absolute }}"
   ansible.builtin.unarchive:
@@ -78,7 +78,7 @@
     remote_src: true
     creates: "{{ zsh_fzf_path_absolute }}/fzf"
   become: true
-  when: not (ansible_os_family == 'RedHat') and fzf
+  when: fzf and not (ansible_os_family == 'RedHat')
 
 - name: Set directory permissions
   ansible.builtin.file:

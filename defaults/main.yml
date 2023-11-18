@@ -12,14 +12,8 @@ zsh_aliases:
   - {
       alias: "auu",
       action: "apt update && apt full-upgrade",
-      when: not ansible_os_family == 'Darwin',
+      when: "{{ ansible_os_family != 'Darwin' }}",
     }
-  - alias gs='git status'
-  - alias gc='git commit'
-  - alias gp='git pull --rebase'
-  - alias gcam='git commit -am'
-  - alias fgi='git rm -r --cached . && git add . && git commit -m "fixed untracked files"'
-  - alias gl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
 
 linux_packages:
   - zsh
@@ -87,19 +81,16 @@ zsh_editor: # mcedit
 zsh_term: xterm-256color
 zsh_mc_solarized_skin: false
 
-zsh_path:
-  - { name: "{{ zsh_fzf_path }}", when: "{{ fzf }}" }
+actual_zsh_paths:
+  - "{{ zsh_fzf_path }}"
   - /usr/local/sbin
   - /usr/local/bin
   - /usr/sbin
   - /usr/bin
   - /sbin
   - /bin
-  - { name: "/opt/homebrew/bin", when: ansible_os_family == 'Darwin' }
-  - {
-      name: "$(brew --prefix)/opt/python@3/libexec/bin",
-      when: ansible_os_family == 'Darwin',
-    }
+  - /opt/homebrew/bin
+  - $(brew --prefix)/opt/python@3/libexec/bin
 
 zsh_load_etc_profile: true
 

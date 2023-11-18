@@ -19,7 +19,7 @@
     state: directory
     recurse: true
     owner: "{{ zsh_user }}"
-    group: "{{ zsh_user }}"
+    # group: "{{ ansible_user_group }}"
   become: true
   become_user: "{{ zsh_user }}"
   with_items:

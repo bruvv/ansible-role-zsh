@@ -206,3 +206,7 @@ You can add any code in variable `zsh_custom_before`, `zsh_custom_after`.
 
 - zsh_custom_before - before include antigen.zsh
 - zsh_custom_after - before include ~/.zshrc.local
+
+## Run locally
+
+`ansible-playbook -i "localhost," -c local -b playbook-local.yml --extra-vars="zsh_user=$(whoami)" --ask-become-pass`

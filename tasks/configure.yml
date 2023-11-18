@@ -52,7 +52,7 @@
 - name: Write .zshrc config
   ansible.builtin.template:
     src: zshrc.j2
-    mode: 0755
+    mode: "0755"
     dest: "{{ zsh_config }}"
     owner: "{{ zsh_user }}"
     group: "{{ zsh_user_group }}"

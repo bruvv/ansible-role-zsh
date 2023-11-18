@@ -4,7 +4,9 @@
 
 export TERM="{{ zsh_term }}"
 {% if zsh_editor %}export EDITOR="{{ zsh_editor }}"
-{% endif %}export PATH="$PATH:{{ zsh_path | join(":") }}"
+{% endif %}
+
+export PATH="$PATH:{{ actual_zsh_paths | join(':') }}"
 
 {% if zsh_antigen_theme == "romkatv/powerlevel10k powerlevel10k" and zsh_powerlevel10k_instant_prompt %}
 # user configs
@@ -81,23 +83,6 @@ antigen theme {{ zsh_antigen_theme }}
 
 antigen apply
 
-###
-
-# Set architecture-specific brew share path.
-arch_name="$(uname -m)"
-if [ "${arch_name}" = "x86_64" ]; then
-    share_path="/usr/local/share"
-elif [ "${arch_name}" = "arm64" ]; then
-    share_path="/opt/homebrew/share"
-else
-    echo "Unknown architecture: ${arch_name}"
-fi
-
-# Allow history search via up/down keys.
-source ${share_path}/zsh-history-substring-search/zsh-history-substring-search.zsh
-bindkey "^[[A" history-substring-search-up
-bindkey "^[[B" history-substring-search-down
-
 # Don't require escaping globbing characters in zsh.
 unsetopt nomatch
 
@@ -127,6 +112,12 @@ zle -N copy-earlier-word
 alias '{{ alias.alias }}'="{{ alias.action }}"
 {% endif %}
 {% endfor %}
+alias gs='git status'
+alias gc='git commit'
+alias gp='git pull --rebase'
+alias gcam='git commit -am'
+alias fgi='git rm -r --cached . && git add . && git commit -m "fixed untracked files"'
+alias gl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
 
 # fzf
 {% if fzf %}
