@@ -1,6 +1,6 @@
 ---
-- hosts: all
-  name: "Setup computer and configure stuff"
+- name: "Setup computer and configure stuff"
+  hosts: all
   gather_facts: true
   vars:
     # your extra bundles here

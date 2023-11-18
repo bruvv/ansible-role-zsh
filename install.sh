@@ -19,7 +19,7 @@ Darwin*)
     else
         brew update
     fi
-    brew_install=(ansible gnu-tar thefuck autojump)
+    brew_install=(ansible gnu-tar)
 
     for i in "${brew_install[@]}"; do
         if ! brew list "$i" &>/dev/null; then
@@ -32,7 +32,7 @@ Darwin*)
         rm -rf /tmp/zsh
     fi
     git clone https://github.com/bruvv/ansible-role-zsh.git /tmp/zsh
-    ansible-galaxy install bruvv.zsh_antigen --force
+    ansible-galaxy install bruvv.zsh_antigen geerlingguy.mac --force
 
     title "Provision playbook for root"
     ansible-playbook -i "localhost," -c local -b /tmp/zsh/playbook.yml --extra-vars="zsh_user=$(whoami)" --ask-become-pass

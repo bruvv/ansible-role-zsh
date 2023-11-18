@@ -1,54 +1,110 @@
 ---
+python_stuff: true
+fzf: false
+
+# useful for deploy many zsh users at host, without duplicate and without write access
+zsh_shared: no
+zsh_source_for_all_users: no
+zsh_change_user_shell: yes
+
+# only single quotes allowed in action
+zsh_aliases:
+  - {
+      alias: "auu",
+      action: "apt update && apt full-upgrade",
+      when: not ansible_os_family == 'Darwin',
+    }
+  - alias gs='git status'
+  - alias gc='git commit'
+  - alias gp='git pull --rebase'
+  - alias gcam='git commit -am'
+  - alias fgi='git rm -r --cached . && git add . && git commit -m "fixed untracked files"'
+  - alias gl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
+
+linux_packages:
+  - zsh
+  - tmux
+  - git
+  - wget
+  - autojump
+  - fd-find
+#  - thefuck
+
+macos_packages:
+  - zsh
+  - git
+  - autojump
+
+macos_packages_python:
+  - zsh
+  - git
+  - autojump
+  - black
+  - python
+  - virtualenv
+
+zsh_antigen_bundles:
+  - ansible
+  - navi
+  - autojump
+  - git
+  - git-auto-fetch
+  - git-escape-magic
+  - zsh-users/zsh-autosuggestions
+  - zsh-users/zsh-syntax-highlighting
+  - sudo
+  - command-not-found
+  - colored-man-pages
+  - { name: brew, when: "{{ ansible_os_family == 'Darwin' }}" }
+  - { name: python, when: "{{ python_stuff }}" }
+  - { name: pip, when: "{{ python_stuff }}" }
+  - {
+      name: MichaelAquilina/zsh-autoswitch-virtualenv,
+      when: "{{ python_stuff }}",
+    }
+  - {
+      name: unixorn/autoupdate-antigen.zshplugin,
+      when: "{{ zsh_update_interval > 0 }}",
+    }
+  - { name: "{{ fzf_widgets }}", when: "{{ fzf }}" }
+
 zsh_user: "{{ ansible_user_id }}"
+zsh_user_group: "{% if ansible_os_family == 'Darwin' %}staff{% else %}{{ zsh_user }}{% endif %}"
+zsh_antigen_path: "{% if zsh_shared %}/usr/share/zsh-config{% else %}~{{ zsh_user }}/.antigen{% endif %}"
+zsh_config: "{% if zsh_shared %}/usr/share/zsh-config/.zshrc{% else %}~{{ zsh_user }}/.zshrc{% endif %}"
+zsh_antigen_path_compat: "{{ zsh_antigen_path | replace('~' + zsh_user, '$HOME') }}"
+zsh_fzf_os: linux
+zsh_fzf_arch: "{% if '64' in ansible_architecture %}amd64{% elif 'arm' in ansible_architecture %}amd64{% else %}386{% endif %}"
+zsh_fzf_url: "https://github.com/junegunn/fzf/releases/download/{{ zsh_fzf_version }}/fzf-{{ zsh_fzf_version }}-{{ zsh_fzf_os }}_{{ zsh_fzf_arch }}.tar.gz"
+zsh_antigen_fzf_path: "{{ zsh_antigen_path }}/repos/https-COLON--SLASH--SLASH-github.com-SLASH-junegunn-SLASH-fzf.git"
+zsh_fzf_default_opts: "--height {{ zsh_fzf_height }}{% if zsh_fzf_reverse %} --reverse{% endif %}{% if zsh_fzf_border %} --border{% endif %}"
 
 # .zshrc config
 zsh_hist_stamps: dd-mm-yyyy
-zsh_share_history: no
+zsh_share_history: false
 zsh_update_interval: 7 # set 0 for disable autoupdates
 zsh_editor: # mcedit
 zsh_term: xterm-256color
-zsh_mc_solarized_skin: no
+zsh_mc_solarized_skin: false
 
 zsh_path:
-  - "{{ zsh_fzf_path }}"
+  - { name: "{{ zsh_fzf_path }}", when: "{{ fzf }}" }
   - /usr/local/sbin
   - /usr/local/bin
   - /usr/sbin
   - /usr/bin
   - /sbin
   - /bin
-  - /usr/games
-  - /usr/local/games
+  - { name: "/opt/homebrew/bin", when: ansible_os_family == 'Darwin' }
+  - {
+      name: "$(brew --prefix)/opt/python@3/libexec/bin",
+      when: ansible_os_family == 'Darwin',
+    }
 
-zsh_load_etc_profile: yes
+zsh_load_etc_profile: true
 
 zsh_antigen_version: master
 zsh_fzf_version: 0.42.0
-
-zsh_antigen_bundles:
-  - thefuck
-  - ansible
-  - terraform
-  - navi
-  - autojump
-  - git
-  - git-auto-fetch
-  - git-escape-magic
-  - python
-  - pip
-  - sudo
-  - command-not-found
-  - colored-man-pages
-  - docker
-  - docker-compose
-  - zsh-users/zsh-autosuggestions
-  - zsh-users/zsh-syntax-highlighting
-  - { name: brew, command: brew, when: "{{ ansible_os_family == 'Darwin' }}" }
-  - {
-      name: unixorn/autoupdate-antigen.zshplugin,
-      when: "{{ zsh_update_interval > 0 }}",
-    }
-  - "{{ fzf_widgets }}"
 
 fzf_widgets: sorenson-axial/fzf-widgets
 
@@ -56,11 +112,6 @@ zsh_antigen_bundles_extras: []
 
 zsh_custom_before: "" # any code before include ~/.zshrc.local
 zsh_custom_after: "" # any code before include ~/.zshrc.local
-
-# useful for deploy many zsh users at host, without duplicate and without write access
-zsh_shared: no
-zsh_source_for_all_users: no
-zsh_change_user_shell: yes
 
 zsh_antigen_theme: "romkatv/powerlevel10k powerlevel10k"
 
@@ -195,14 +246,6 @@ zsh_hotkeys:
     }
 
 zsh_hotkeys_extras: []
-
-# only single quotes allowed in action
-zsh_aliases:
-  - { alias: "auu", action: "apt update && apt full-upgrade" }
-  - {
-      alias: "fgi",
-      action: 'git rm -r --cached . && git add . && git commit -m "fixed untracked files"',
-    }
 
 # zsh-autosuggestions
 zsh_autosuggestions_max_length: 15

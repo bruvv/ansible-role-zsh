@@ -32,14 +32,15 @@ ANTIGEN_BUNDLES="{{ zsh_antigen_path_compat }}/bundles"
 ANTIGEN_PLUGIN_UPDATE_DAYS="{{ zsh_update_interval }}"
 ANTIGEN_SYSTEM_UPDATE_DAYS="{{ zsh_update_interval }}"
 
+# Tell homebrew to not autoupdate every single time I run it (just once a week).
+export HOMEBREW_AUTO_UPDATE_SECS=604800
+
 {% if zsh_custom_before %}# Custom configs zsh_custom_before
 {{ zsh_custom_before }}{% endif %}
 
 source "{{ zsh_antigen_path_compat }}/antigen/antigen.zsh"
 
 antigen use oh-my-zsh
-
-alias fd=fdfind # for correct working of sorenson-axial/fzf-widgets
 
 {% set bundles_enabled = [] %}
 
@@ -62,7 +63,6 @@ alias fd=fdfind # for correct working of sorenson-axial/fzf-widgets
 
         {% if valid and not command_not_exists %}
             {%- if 'zsh-syntax-highlighting' in bundle.name or 'fast-syntax-highlighting' in bundle.name -%}
-# will fixed in zsh-autosuggestion v0.4 - https://github.com/zsh-users/zsh-autosuggestions/pull/218
 if (( ZSHRC_LOAD_ONCE++ == 0 )); then
     antigen bundle {{ bundle.name }}
 fi
@@ -83,19 +83,43 @@ antigen apply
 
 ###
 
+# Set architecture-specific brew share path.
+arch_name="$(uname -m)"
+if [ "${arch_name}" = "x86_64" ]; then
+    share_path="/usr/local/share"
+elif [ "${arch_name}" = "arm64" ]; then
+    share_path="/opt/homebrew/share"
+else
+    echo "Unknown architecture: ${arch_name}"
+fi
+
+# Allow history search via up/down keys.
+source ${share_path}/zsh-history-substring-search/zsh-history-substring-search.zsh
+bindkey "^[[A" history-substring-search-up
+bindkey "^[[B" history-substring-search-down
+
+# Don't require escaping globbing characters in zsh.
+unsetopt nomatch
+
 {% if not zsh_share_history %}
 unsetopt share_history
 {% endif %}
+
+# Include alias file (if present) containing aliases for ssh, etc.
+if [ -f ~/.aliases ]
+then
+  source ~/.aliases
+fi
 
 autoload -Uz copy-earlier-word
 zle -N copy-earlier-word
 
 # hotkeys
-{% for hotkey in zsh_hotkeys %}
-{% if 'hotkey' in hotkey and hotkey.hotkey != '' and (hotkey.bundle is not defined or hotkey.bundle in bundles_enabled) %}
-bindkey '{{ hotkey.hotkey }}' {{ hotkey.action }}
-{% endif %}
-{% endfor %}
+# {% for hotkey in zsh_hotkeys %}
+# {% if 'hotkey' in hotkey and hotkey.hotkey != '' and (hotkey.bundle is not defined or hotkey.bundle in bundles_enabled) %}
+# bindkey '{{ hotkey.hotkey }}' {{ hotkey.action }}
+# {% endif %}
+# {% endfor %}
 
 # aliases
 {% for alias in zsh_aliases %}
@@ -105,17 +129,19 @@ alias '{{ alias.alias }}'="{{ alias.action }}"
 {% endfor %}
 
 # fzf
+{% if fzf %}
 {% if not (ansible_facts['distribution'] == 'Rocky') %}
 export FZF_TMUX=0
 export FZF_DEFAULT_OPTS="{{ zsh_fzf_default_opts }}"
 
 # fzf-widgets: fzf-change-reset-dir
 {% if zsh_version is version_compare('5.0', '>=') -%}
-autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook compinit && compinit
 add-zsh-hook chpwd chpwd_recent_dirs
 {% endif %}
 declare -p FZF_WIDGETS_OPTS > /dev/null 2>&1 && FZF_WIDGETS_OPTS[insert-history]="{{ zsh_fzf_ctrl_r_opts }}"
 declare -p FZF_WIDGET_OPTS > /dev/null 2>&1 && FZF_WIDGET_OPTS[insert-history]="{{ zsh_fzf_ctrl_r_opts }}"
+{% endif %}
 {% endif %}
 
 # zsh-autosuggestions

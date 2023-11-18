@@ -1,16 +1,16 @@
-Tested on Ubuntu 22.04, macOS 13.0.1.
+# Tested on Ubuntu 22.04, macOS 13.0.1
 
-## Zero-knowledge install:
+## Zero-knowledge install
 
 If you using Ubuntu or Debian and not familiar with Ansible, you can just execute [install.sh](install.sh) on target machine:
 
-```
+```bash
 curl https://raw.githubusercontent.com/bruvv/ansible-role-zsh/main/install.sh | bash
 ```
 
 Then [configure terminal application](#configure-terminal-application).
 
-## Includes:
+## Includes
 
 - zsh
 - [antigen](https://github.com/zsh-users/antigen)
@@ -144,7 +144,7 @@ zsh_aliases:
   - { alias: 'dfh', action: 'df -h | grep -v docker', bundle: }
 ```
 
-#### Default hotkeys from plugins:
+#### Default hotkeys from plugins
 
 - <kbd>&rarr;</kbd> - accept autosuggestion
 - <kbd>Ctrl+Z</kbd> - move current application to background, press again for return to foreground

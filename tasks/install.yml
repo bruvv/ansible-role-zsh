@@ -7,46 +7,33 @@
 
 - name: Installing debian system packages
   ansible.builtin.package:
-    name:
-      - zsh
-      - tmux
-      - git
-      - wget
-      - thefuck
-      - fzf
-      - autojump
-      - fd-find
+    name: { { linux_packages } }
     state: present
-  # brew don't work from root user on macOS
   become: "{{ ansible_os_family != 'Darwin' }}"
-  when: ansible_os_family == 'Debian'
+  when: ansible_os_family == 'Debian' or ansible_os_family == 'RedHat'
 
-- name: Installing rocky system packages
-  ansible.builtin.package:
-    name:
-      - zsh
-      - tmux
-      - git
-      - python3-pip
-      - wget
-      - autojump
-      - fd-find
-    state: present
-  # brew don't work from root user on macOS
+- name: Installing MacOS system packages without python
+  community.general.homebrew:
+    name: { { macos_packages } }
+    state: latest
+    update_homebrew: true
   become: "{{ ansible_os_family != 'Darwin' }}"
-  when: ansible_os_family == 'RedHat'
+  when: ansible_os_family == 'Darwin' and not python_stuff
 
-- name: Installing rocky system packages
-  ansible.builtin.pip:
-    name: thefuck
-  when: ansible_os_family == 'RedHat'
+- name: Installing MacOS system packages with python
+  community.general.homebrew:
+    name: { { macos_packages_python } }
+    state: latest
+    update_homebrew: true
+  become: "{{ ansible_os_family != 'Darwin' }}"
+  when: ansible_os_family == 'Darwin' and python_stuff
 
 - name: Check if antigen path exist
   ansible.builtin.stat:
     path: "{{ zsh_antigen_path }}"
   register: zsh_antigen_path_present
 
-- name: Create direcoty {{ zsh_antigen_path }}
+- name: Create directory {{ zsh_antigen_path }}
   ansible.builtin.file:
     dest: "{{ zsh_antigen_path }}"
     mode: "0755"
@@ -56,25 +43,24 @@
 
 - name: Clone antigen {{ zsh_antigen_version }}
   ansible.builtin.git:
-    repo: https://github.com/zsh-users/antigen.git
+    repo: git.io/antigen
     dest: "{{ zsh_antigen_path }}/antigen"
     version: "{{ zsh_antigen_version }}"
     force: true
   become: true
-  # become_user: "{{ zsh_user }}"
   register: zsh_register_antigen_clone
 
 - name: Set zsh_fzf_path to /usr/local/bin
   ansible.builtin.set_fact:
     zsh_fzf_path: /usr/local/bin
   changed_when: false
-  when: zsh_shared and not (ansible_os_family == 'RedHat')
+  when: zsh_shared and fzf and not (ansible_os_family == 'RedHat')
 
 - name: Set zsh_fzf_path_absolute
   ansible.builtin.set_fact:
     zsh_fzf_path_absolute: "{{ zsh_fzf_path | replace('$HOME', '~' + zsh_user) }}"
   changed_when: false
-  when: not (ansible_os_family == 'RedHat')
+  when: not (ansible_os_family == 'RedHat') and fzf
 
 - name: Ensure users home binary folder is present
   ansible.builtin.file:
@@ -92,7 +78,7 @@
     remote_src: true
     creates: "{{ zsh_fzf_path_absolute }}/fzf"
   become: true
-  when: not (ansible_os_family == 'RedHat')
+  when: not (ansible_os_family == 'RedHat') and fzf
 
 - name: Set directory permissions
   ansible.builtin.file:
